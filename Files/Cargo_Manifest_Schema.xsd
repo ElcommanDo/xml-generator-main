@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 rel. 3 sp1 (http://www.altova.com) by Kama (Crimsonlogic) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="CargoManifest">
+		<xs:annotation>
+			<xs:documentation>Schema for cargo manifest message submission to customs</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="MessageHeader" type="CMMsgHeaderType">
+					<xs:annotation>
+						<xs:documentation>Header for the message. Includes information on the sender, date and time</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ManifestRecord" maxOccurs="999">
+					<xs:annotation>
+						<xs:documentation>List of cargo manifests. It is allowed to submit multiple cargol manifests in one file</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ManifestHeader" type="CMManifestHeaderType">
+								<xs:annotation>
+									<xs:documentation>Manifest header information. Includes various details like, manifest number/ETD/ETA/ports of discharge and departure</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="MeansOfTransport" type="CMMeanOfTransportType">
+								<xs:annotation>
+									<xs:documentation>Means of transport details</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TransportDocumentList" type="CMTransportDocumentListType">
+								<xs:annotation>
+									<xs:documentation>List of transport documents(House BL, House AWB) associated with the manifest</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--Complex data type definitions-->
+	<xs:complexType name="CMMsgHeaderType">
+		<xs:annotation>
+			<xs:documentation>Definition of message header information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MessageSender" type="CMMessageSenderDataType">
+				<xs:annotation>
+					<xs:documentation>Details of the message sender</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MessageDate" type="MessageDateDataType" minOccurs="0"/>
+			<xs:element name="MessageTime" type="MessageTimeDataType" minOccurs="0"/>
+			
+			<xs:element name="CourierManifest" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>To give manifest is courier </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+					<xs:length value="1"/>
+					 <xs:enumeration value="Y"/>
+					 <xs:enumeration value="N"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="GlobalGuaranteePayment" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Payment option to deduct from Global Guarantee or through normal payment</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:length value="1"/>
+						<xs:enumeration value="Y"/>
+						<xs:enumeration value="N"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMManifestHeaderType">
+		<xs:annotation>
+			<xs:documentation>Definition of Manifest header information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ManifestNo" type="ReferenceNumberDataType">
+				<xs:annotation>
+					<xs:documentation>Cargo Manifest reference number. It is the unique number for the manifest</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransportMode" type="CMTransportModeDataType">
+				<xs:annotation>
+					<xs:documentation>Mode of transport</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="GeneralManifestNo" type="ReferenceNumberDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>General manifest number in which the transport document is included. It is mandatory to have this reference number included</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransportDocType">
+				<xs:annotation>
+					<xs:documentation>Transport document type. Possible values are IN,OUT</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="CMTrnDocTypeDataType"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PortOfDischarge" type="CMPortDataType">
+				<xs:annotation>
+					<xs:documentation>Seaport/airport at which goods are unloaded from the means of transport.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NumberofTrnDocs" type="IntegerDataType">
+				<xs:annotation>
+					<xs:documentation>Total number of transport documents associated to the manifest</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NumberofContainers" type="IntegerDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Total number of containers in the cargo manifest</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMMessageSenderDataType">
+		<xs:annotation>
+			<xs:documentation>Definition of Message sender datatype</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="customs_code" type="CustomsCodeType">
+				<xs:annotation>
+					<xs:documentation>Code provided by customs for the sender during registration</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="user_id" type="UserIDDataType">
+				<xs:annotation>
+					<xs:documentation>user id of the sender</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMMeanOfTransportType">
+		<xs:annotation>
+			<xs:documentation>Definition of Means of transport</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MeansofTransportNumber">
+				<xs:annotation>
+					<xs:documentation>Unique Identification number for the means of transport used. Sea: Lloyd's number, Air: IATA air craft ID</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="25"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="MeansofTransportName">
+				<xs:annotation>
+					<xs:documentation>Name to identify the means of transport used</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="MeansofTransportNat" type="CountryCodeDataType">
+				<xs:annotation>
+					<xs:documentation>Nationality of means of transport. ISO country code</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DestinationCountry" type="CountryCodeDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ISO country code of the final destination of the means of transport</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FlightVoyageNumber" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>To identify a journey of a means of transport. Voyage number or flight number</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="25"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ETA" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date and time of arrival of the means of transport</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ETD" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date and time of departure of the means of transport</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMTransportDocumentListType">
+		<xs:annotation>
+			<xs:documentation>Transport document list data definition. Transport document refers to house bill of lading or house airway bills</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TransportDocument" type="CMTransportDocumentDataType" maxOccurs="999">
+				<xs:annotation>
+					<xs:documentation>Data definition for each transport document. Transport document refers to the House BL or House AWB</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMTransportDocumentDataType">
+		<xs:annotation>
+			<xs:documentation>Transport document details definition</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MasterTransportDocNumber" type="ReferenceNumberDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Reference for the master transport document. Master BL Number or Master AWB Number</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransportDocNumber" type="ReferenceNumberDataType">
+				<xs:annotation>
+					<xs:documentation>Unique identifier for the transport document. House BL Number or House AWB Number</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TotalQuantity" type="CMQuantityDataType">
+				<xs:annotation>
+					<xs:documentation>Total quantity of all items in the transport document</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TotalGrossWeight" type="CMWeightDataType">
+				<xs:annotation>
+					<xs:documentation>Total Gross Weight</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FirstPortofLoading" type="CMPortDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>First port of loading of the cargo in the transport document</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PortofLoading" type="CMPortDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Port of loading of the cargo in the transport document</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PortofDischarge" type="CMPortDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Port of discharge of the cargo in the transport document</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FinalDestination" type="CountryCodeDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Country of final destination for the cargo in the transport document</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PartyList" type="CMPartyListType" >
+				<xs:annotation>
+					<xs:documentation>List of parties involved in the transport document</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ContainerList" type="CMContainerListType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>List of containers in the transport document</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ItemList" type="CMItemListType">
+				<xs:annotation>
+					<xs:documentation>List of items in the transport document</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RouteList" type="CMRouteListType">
+				<xs:annotation>
+					<xs:documentation>Route for the transport document. These are the countries/ports the items in the transport document has passed through</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DocList" type="CMDocListType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>List of documents attached with the manifest. You may attach PDF files for the supporting documents</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMPartyListType">
+		<xs:annotation>
+			<xs:documentation>Party list data type definition. This is the list of parties involved in the transport document</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Party" type="PartyDataType" maxOccurs="5"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartyDataType">
+		<xs:annotation>
+			<xs:documentation>Party data type definition. Describes the party details</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PartyType" type="PartyTypeDataType">
+				<xs:annotation>
+					<xs:documentation>Type of party. Possible values are Consignee, Consignor, Carrier agent, Notify party</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PartyCode" type="CustomsCodeType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Customs code of the party, if available</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PartyName" type="PartyNameDataType">
+				<xs:annotation>
+					<xs:documentation>Name of the party</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PartyAddress" type="AddressDataType">
+				<xs:annotation>
+					<xs:documentation>Address of the party</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMContainerListType">
+		<xs:annotation>
+			<xs:documentation>Container List definition</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Container" type="CMContainerDataType" maxOccurs="999"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMContainerDataType">
+		<xs:annotation>
+			<xs:documentation>Definition of container data type</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ContainerNumber" type="ReferenceNumberDataType">
+				<xs:annotation>
+					<xs:documentation>Identification number for the container</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ContainerType" type="ContainerTypeDataType">
+				<xs:annotation>
+					<xs:documentation>Type of container. e.g. Reefer, Dry</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ContainerSize" type="ContainerSizeDataType">
+				<xs:annotation>
+					<xs:documentation>Size of the container. E.g.10,20,40</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SealNo" type="CMContainerSealDataType" minOccurs="0" maxOccurs="999">
+				<xs:annotation>
+					<xs:documentation>Seals affixed to the container</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TareWeight" type="CMWeightDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Tare weight of the container and the unit of measurement</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CargoWeight" type="CMWeightDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Weight of the cargo inside the container and the unit of measurement</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMContainerSealDataType">
+		<xs:annotation>
+			<xs:documentation>Container seal data type definition</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SealNo" type="SealNoDataType">
+				<xs:annotation>
+					<xs:documentation>Seal Number</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CountryCode" type="CountryCodeDataType">
+				<xs:annotation>
+					<xs:documentation>ISO Country Code of the country in which the seal is affixed</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMItemListType">
+		<xs:annotation>
+			<xs:documentation>Items list data type definition. This is the list of items associated with the transport document</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Item" type="CMItemDataType" maxOccurs="999"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMItemDataType">
+		<xs:annotation>
+			<xs:documentation>Items data type definition. Details of the items associated with the transport document</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ItemDescription" type="DescriptionDataType">
+				<xs:annotation>
+					<xs:documentation>A detailed description of the item</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ItemCOO" type="CountryCodeDataType">
+				<xs:annotation>
+					<xs:documentation>Country of origin of the item</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ItemQuantity" type="CMQuantityDataType">
+				<xs:annotation>
+					<xs:documentation>Total quantity of the item</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ItemGrossWeight" type="CMWeightDataType">
+				<xs:annotation>
+					<xs:documentation>Gross weight of the item</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ItemPackagingType" type="PackagingDataType">
+				<xs:annotation>
+					<xs:documentation>Packaging type of the item</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ItemContainerNumber" type="DescriptionDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Container numbers seperated by comma in which the item is included. Requried for containerized cargo</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ItemMarksNumbers" type="DescriptionDataType">
+				<xs:annotation>
+					<xs:documentation>Free text description of the marks and numbers on a transport unit or package</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ItemDGFlag" type="YesNoDataType" default="N">
+				<xs:annotation>
+					<xs:documentation>Dangerous Goods indication flag for the item. Defaulted to "N". This is mandatory if the item is in the list of United Nations Dangerous Goods</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ItemUNDGClass" type="UNDGClassDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Classification of dangerous goods, by type of risk involved. e.g : Class1 - Explosives. Mandatory if ItemDGFlag="Y"</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMRouteListType">
+		<xs:annotation>
+			<xs:documentation>Details of the route of the transport document</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Route" type="CMRouteDataType" maxOccurs="99"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMRouteDataType">
+		<xs:annotation>
+			<xs:documentation>Details of the route of the transport document</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Port" type="CMPortDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMDocListType">
+		<xs:annotation>
+			<xs:documentation>Details of the document attachment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DocAttachment" type="CMDocAttachmentDataType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMDocAttachmentDataType">
+		<xs:annotation>
+			<xs:documentation>Details of the document attachment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Title">
+				<xs:annotation>
+					<xs:documentation>Title of the document attachment. E.g Invoice</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Description" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Detailed Description of the document attachment</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="2000"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="FileName">
+				<xs:annotation>
+					<xs:documentation>File Name of the document attachment</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMPortDataType">
+		<xs:annotation>
+			<xs:documentation> Port data type definition</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CountryCode" type="CountryCodeDataType">
+				<xs:annotation>
+					<xs:documentation>ISO Country Code</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PortCode">
+				<xs:annotation>
+					<xs:documentation>Port Code</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="2"/>
+						<xs:maxLength value="5"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PortName">
+				<xs:annotation>
+					<xs:documentation>Port Name</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="35"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PortType">
+				<xs:annotation>
+					<xs:documentation>Port Type (Sea, Air or Land)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:length value="1"/>
+						<xs:enumeration value="S"/>
+						<xs:enumeration value="A"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMWeightDataType">
+		<xs:annotation>
+			<xs:documentation>Definition for weight data type</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Weight">
+				<xs:annotation>
+					<xs:documentation>Weight</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:decimal">
+						<xs:minExclusive value="0"/>
+						<xs:maxInclusive value="999999999999999"/>
+						<xs:fractionDigits value="10"/>
+						<xs:totalDigits value="25"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="UOM" type="UOMDataType">
+				<xs:annotation>
+					<xs:documentation>Unit of Measurement for weight</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CMQuantityDataType">
+		<xs:annotation>
+			<xs:documentation>Definition of quantity data type</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Quantity">
+				<xs:annotation>
+					<xs:documentation>Quantity</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:decimal">
+						<xs:minExclusive value="0"/>
+						<xs:maxInclusive value="999999999999999"/>
+						<xs:totalDigits value="25"/>
+						<xs:fractionDigits value="10"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="UOM" type="UOMDataType">
+				<xs:annotation>
+					<xs:documentation>Unit of measurement in which quantity is expressed</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Simple data type definitions-->
+	<xs:simpleType name="MessageDateDataType">
+		<xs:annotation>
+			<xs:documentation>Format: ddmmyyyy</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="8"/>
+			<xs:maxLength value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MessageTimeDataType">
+		<xs:annotation>
+			<xs:documentation>Format: hhmm</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="4"/>
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CustomsCodeType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="4"/>
+			<xs:maxLength value="6"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="UserIDDataType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="11"/>
+			<xs:maxLength value="22"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ReferenceNumberDataType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="35"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+	<xs:simpleType name="CountryCodeDataType">
+		<xs:annotation>
+			<xs:documentation> Country (coded) element definition. ISO Country code</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IntegerDataType">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="9999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CMTransportModeDataType">
+		<xs:annotation>
+			<xs:documentation>Mode of tranport. Possible values are "S"=Sea, "A"=Air</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="1"/>
+			<xs:enumeration value="S"/>
+			<xs:enumeration value="A"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ContainerTypeDataType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="UOMDataType">
+		<xs:annotation>
+			<xs:documentation>Unit of Measurement data type definition</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ContainerSizeDataType">
+		<xs:annotation>
+			<xs:documentation>Container size data type definition. E.g. 40,20</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SealNoDataType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="35"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PartyTypeDataType">
+		<xs:restriction base="xs:string">
+			<xs:length value="1"/>
+			<xs:enumeration value="1">
+				<xs:annotation>
+					<xs:documentation>Consignee: Party to which the goods are consigned.Customs code is mandatory for transport documents of type IMP</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="2">
+				<xs:annotation>
+					<xs:documentation>Consignor: Party from which the goods are consigned. Customs code is mandatory for transport documents of type EXP</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="3">
+				<xs:annotation>
+					<xs:documentation>Shipper</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="4">
+				<xs:annotation>
+					<xs:documentation>Notify Party: Party to be notified on the arrival/departure of the goods</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PartyNameDataType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AddressDataType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="500"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CMTrnDocTypeDataType">
+		<xs:annotation>
+			<xs:documentation>Transport document type definition. Possible values are Import,Export, Transit</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="3"/>
+			<xs:enumeration value="IN">
+				<xs:annotation>
+					<xs:documentation>Import</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OUT">
+				<xs:annotation>
+					<xs:documentation>Export</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TRN">
+				<xs:annotation>
+					<xs:documentation>Transit</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DescriptionDataType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PackagingDataType">
+		<xs:annotation>
+			<xs:documentation>Type of packaging definition</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="3"/>
+			<xs:enumeration value="CON">
+				<xs:annotation>
+					<xs:documentation>Containerized</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BUL">
+				<xs:annotation>
+					<xs:documentation>Bulk</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OTH">
+				<xs:annotation>
+					<xs:documentation>Others</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="COV">
+				<xs:annotation>
+					<xs:documentation>Conventional</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="YesNoDataType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Y">
+				<xs:annotation>
+					<xs:documentation>Yes</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="N">
+				<xs:annotation>
+					<xs:documentation>No</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="UNDGClassDataType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="17"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

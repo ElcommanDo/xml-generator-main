@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <br>
+    <h1>Documentation</h1>
+    <hr><br>
+    <h2>Manual for Users:</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-highlight">
+            <thead>
+            <th>Steps to Be Followed</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1. You can generate and upload XMLs for 2 types of documents called Declaration and Manifest.</td>
+            </tr>
+            <tr>
+                <td>2. And there are 2 methods to upload XMLs in this app. One is to fill a single Manifest/Declaration through web forms and the other is to bulk import data through an Excel.</td>
+            </tr>
+            <tr>
+                <td>3. You may go to the desired page, i.e form or bulk, and fill the form with available data points or select the files need to be imported.</td>
+            </tr>
+            <tr>
+                <td>4. Once the data is filled or files are selected for importing, you can click "Upload" Button to produce the XML that is valid as per given XSD Schema.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <h2>Manual for Developers:</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-highlight">
+            <thead>
+            <th>Steps to Be Followed</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1. Install <a href="https://docs.docker.com/desktop/#download-and-install">Docker</a> on your system.</td>
+            </tr>
+            <tr>
+                <td>2. Go to the base file directory and run <i>"docker-compose up -d --build"</i></td>
+            </tr>
+            <tr>
+                <td>3. Once the container is up and running, you can access the app at: <a href="http://localhost:5000/">localhost:5000</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <br><br><br>
+    <footer style="position: fixed; bottom: 0; width: 100%; background-color: white;">
+        <hr>
+        <h6 class="text-center">v.0.0.1 | Developed by <a href="https://www.tfsbs.com/">TFSBS</a> | All Rights Reserved &copy; 2022</h6>
+    </footer>
+
+{% endblock %}

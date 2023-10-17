@@ -1,0 +1,349 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form class="form-horizontal" action="/form" method = "POST" enctype = "multipart/form-data" >
+        <br>
+        <div class="row">
+            <div class="col-sm-10 col-12">
+                <h1>Form Upload Tool</h1>
+            </div>
+            <div class="col-sm-2 col-12" style="position: fixed; right: 0;">
+                <button type="reset" class="btn btn-danger pull-right">CLEAR</button>
+                <button type="submit" class="btn btn-success pull-right m-1">UPLOAD</button>
+            </div>
+        </div>
+
+        <hr>
+        <!-- Manifest form  -->
+        <h2><u>CargoManifest Form</u></h2>
+        <br>
+        <div id="manifest-form">
+            <div class="row g-3">
+                <h4>Manifest Header:</h4>
+                <div class="col-md-6">
+                    <label for="ManifestNo" class="form-label">Manifest No:</label>
+                    <input type="text" class="form-control" id="ManifestNo" name="ManifestNo" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="TransportMode" class="form-label">Transport Mode:</label>
+                    <select id="TransportMode" name="TransportMode" class="form-select" required>
+                        <option value="A" selected>A</option>
+                        <option value="S">S</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="GeneralManifestNo" class="form-label">General Manifest No:</label>
+                    <input type="text" class="form-control" id="GeneralManifestNo" name="GeneralManifestNo" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="NumberofTrnDocs" class="form-label">Number of Trnsport Docs:</label>
+                    <input type="text" class="form-control" id="NumberofTrnDocs" name="NumberofTrnDocs" required>
+                </div>
+                
+                <h5>Port of Discharge:</h5>
+                <div class="col-md-6">
+                    <label for="PortOfDischargeCountryCode" class="form-label">Country Code:</label>
+                    <select id="PortOfDischargeCountryCode" name="PortOfDischargeCountryCode" class="form-select">
+                        <option value="QA" selected>QA</option>
+                        <option value="US">US</option>
+                        <option value="KW">KW</option>
+                        <option value="AE">AE</option>
+                        <option value="TR">TR</option>
+                        <option value="IN">IN</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="PortOfDischargePortCode" class="form-label">Port Code:</label>
+                    <input type="text" class="form-control" id="PortOfDischargePortCode" name="PortOfDischargePortCode" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="PortOfDischargePortName" class="form-label">Port Name:</label>
+                    <input type="text" class="form-control" id="PortOfDischargePortName" name="PortOfDischargePortName" required>
+                </div>
+                <hr>
+                <h4>Means of Transport:</h4>
+                <div class="col-md-6">
+                    <label for="MeansofTransportNumber" class="form-label">Number:</label>
+                    <input type="text" class="form-control" id="MeansofTransportNumber" name="MeansofTransportNumber" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="MeansofTransportName" class="form-label">Name:</label>
+                    <input type="text" class="form-control" id="MeansofTransportName" name="MeansofTransportName" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="MeansofTransportNat" class="form-label">Nationality:</label>
+                    <input type="text" class="form-control" id="MeansofTransportNat" name="MeansofTransportNat" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="FlightVoyageNumber" class="form-label">Flight Voyage Number:</label>
+                    <input type="text" class="form-control" id="FlightVoyageNumber" name="FlightVoyageNumber" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="MeansofTransportETA" class="form-label">Estimated Time of Arrival:</label>
+                    <input type="date" class="form-control mb-1" id="MeansofTransportETADate" name="MeansofTransportETADate" required>
+                    <input type="time" class="form-control" id="MeansofTransportETATime" name="MeansofTransportETATime" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="MeansofTransportETD" class="form-label">Estimated Time of Departure:</label>
+                    <input type="date" class="form-control mb-1" id="MeansofTransportETDDate" name="MeansofTransportETDDate" required>
+                    <input type="time" class="form-control" id="MeansofTransportETDTime" name="MeansofTransportETDTime" required>
+                </div>
+                <hr>
+                <h4>Transport Documents:</h4>
+                <div class="col-md-6">
+                    <label for="TransportDocNumber" class="form-label">Master Air Way Bill No:</label>
+                    <input type="text" class="form-control" id="TransportDocNumber" name="TransportDocNumber" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="TDTotalQuantity" class="form-label">Total Quantity:</label>
+                    <input type="number" class="form-control" id="TDTotalQuantity" name="TDTotalQuantity" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="TDTotalGrossWeight" class="form-label">Total Gross Weight:</label>
+                    <input type="number" class="form-control" id="TDTotalGrossWeight" name="TDTotalGrossWeight" required>
+                </div>
+                <h5>First Port of Loading:</h5>
+                <div class="col-md-6">
+                    <label for="FirstPortofLoadingCountryCode" class="form-label">Country Code:</label>
+                    <select id="FirstPortofLoadingCountryCode" name="FirstPortofLoadingCountryCode" class="form-select">
+                        <option value="QA" selected>QA</option>
+                        <option value="US">US</option>
+                        <option value="KW">KW</option>
+                        <option value="AE">AE</option>
+                        <option value="TR">TR</option>
+                        <option value="IN">IN</option>
+                        </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="FirstPoLPortCode" class="form-label">Port Code:</label>
+                    <input type="text" class="form-control" id="FirstPoLPortCode" name="FirstPoLPortCode" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="FirstPortofLoadingPortName" class="form-label">Port Name:</label>
+                    <input type="text" class="form-control" id="FirstPortofLoadingPortName" name="FirstPortofLoadingPortName" required>
+                </div>
+                <hr>
+                <h4>Items:</h4>
+                <div class="col-md-6">
+                    <label for="ItemDescription" class="form-label">Description:</label>
+                    <input type="text" class="form-control" id="ItemDescription" name="ItemDescription" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="ItemCOO" class="form-label">COO:</label>
+                    <input type="text" class="form-control" id="ItemCOO" name="ItemCOO" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="ItemQuantity" class="form-label">Quantity:</label>
+                    <input type="number" class="form-control" id="ItemQuantity" name="ItemQuantity" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="ItemGrossWeight" class="form-label">Gross Weight:</label>
+                    <input type="number" class="form-control" id="ItemGrossWeight" name="ItemGrossWeight" required>
+                </div>
+            </div>
+        </div>
+        <hr><br>
+        
+        <!-- Declaration Form  -->
+        <h2><u>Declaration Form</u></h2>
+        <br>
+        <div class="row g-3">
+            <h4>Receiver:</h4>
+            <div class="col-md-6">
+                <label for="ReceiverName" class="form-label">Receiver Name:</label>
+                <input type="text" class="form-control" id="ReceiverName" name="ReceiverName" required>
+            </div>
+            <div class="col-md-6">
+                <label for="ReceiverAddress" class="form-label">Receiver Address:</label>
+                <input type="text" class="form-control" id="ReceiverAddress" name="ReceiverAddress" required>
+            </div>
+            <div class="col-md-6">
+                <label for="ReceiverPhone" class="form-label">Receiver Phone(8 digits):</label>
+                <input type="number" class="form-control" id="ReceiverPhone" name="ReceiverPhone" min="10000000" max="99999999" required>
+            </div>
+            <div class="col-md-6">
+                <label for="ImporterIdType" class="form-label">Importer Id Type:</label>
+                <select id="ImporterIdType" name="ImporterIdType" class="form-select">
+                <option value="QID" selected>QID</option>
+                <option value="PASPRT">PASPRT</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="ImporterIdNo" class="form-label">QID No:</label>
+                <input type="text" class="form-control" id="ImporterIdNo" name="ImporterIdNo" required>
+            </div>
+            <hr>
+            <h4>Sender:</h4>
+            <div class="col-md-6">
+                <label for="SenderName" class="form-label">Sender Name:</label>
+                <input type="text" class="form-control" id="SenderName" name="SenderName" required>
+            </div>
+            <div class="col-md-6">
+                <label for="SenderAddress" class="form-label">Sender Address:</label>
+                <input type="text" class="form-control" id="SenderAddress" name="SenderAddress" required>
+            </div>
+            <div class="col-md-6">
+                <label for="SenderPhone" class="form-label">Sender Phone(8 digits):</label>
+                <input type="number" class="form-control" id="SenderPhone" name="SenderPhone" min="10000000" max="99999999" required>
+            </div>
+            <hr>
+            <h4>Bill of Lading:</h4>
+            <div class="col-md-6">
+                <label for="CargoManifestNumber" class="form-label">Cargo Manifest Number:</label>
+                <input type="text" class="form-control" id="CargoManifestNumber" name="CargoManifestNumber" value="MAWB#">
+            </div>
+            <div class="col-md-6">
+                <label for="MasterBLNumber" class="form-label">Master BL Number:</label>
+                <input type="text" class="form-control" id="MasterBLNumber" name="MasterBLNumber">
+            </div>
+            <div class="col-md-6">
+                <label for="BoLCountryOfLoading" class="form-label">Country Of Loading:</label>
+                <select id="BoLCountryOfLoading" name="BoLCountryOfLoading" class="form-select">
+                <option value="TR-TURKEY" selected>TR-TURKEY</option>
+                <option value="KW-KUWAIT">KW-KUWAIT</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="BoLPortOfLoading" class="form-label">Port Of Loading:</label>
+                <select id="BoLPortOfLoading" name="BoLPortOfLoading" class="form-select">
+                <option value="TRISL - Istanbul Airport" selected>TRISL-Istanbul Airport</option>
+                <!-- <option value="KW-KUWAIT">KW-KUWAIT</option> -->
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="DateofArrivalOrDeparture" class="form-label">Date of Arrival Or Departure:</label>
+                <input type="date" class="form-control" id="DateofArrivalOrDeparture" name="DateofArrivalOrDeparture">
+            </div>
+            <div class="col-md-6">
+                <label for="TransportIdentification" class="form-label">TransportIdentification No.:</label>
+                <input type="text" class="form-control" id="TransportIdentification" name="TransportIdentification">
+            </div>
+            <div class="col-md-6">
+                <label for="TransportName" class="form-label">Transport Name:</label>
+                <input type="text" class="form-control" id="TransportName" name="TransportName">
+            </div>
+            <div class="col-md-6">
+                <label for="TransportNationality" class="form-label">Transport Nationality:</label>
+                <input type="text" class="form-control" id="TransportNationality" name="TransportNationality">
+            </div>
+            <div class="col-md-6">
+                <label for="TransportVoyageNumber" class="form-label">Transport Voyage Number:</label>
+                <input type="text" class="form-control" id="TransportVoyageNumber" name="TransportVoyageNumber">
+            </div>
+            <div class="col-md-6">
+                <label for="NumberOfPackagesBL" class="form-label">Number Of Packages:</label>
+                <input type="text" class="form-control" id="NumberOfPackagesBL" name="NumberOfPackagesBL">
+            </div>
+            <div class="col-md-6">
+                <label for="BLGrossWeight" class="form-label">Weight:</label>
+                <input type="text" class="form-control" id="BLGrossWeight" name="BLGrossWeight">
+            </div>
+
+            <hr>
+            <h4>Certificate Of Origins:</h4>
+            <div class="col-md-6">
+                <label for="CertificateNumber" class="form-label">Certificate Number:</label>
+                <input type="text" class="form-control" id="CertificateNumber" name="CertificateNumber">
+            </div>
+            <div class="col-md-6">
+                <label for="IssuanceDate" class="form-label">Issuance Date:</label>
+                <input type="date" class="form-control" id="IssuanceDate" name="IssuanceDate">
+            </div>
+            <div class="col-md-6">
+                <label for="CountryOfOriginCoo" class="form-label">Country Of Origin:</label>
+                <input type="text" class="form-control" id="CountryOfOriginCoo" name="CountryOfOriginCoo">
+            </div>
+            <div class="col-md-6">
+                <label for="CooTotalAmount" class="form-label">Total Amount:</label>
+                <input type="text" class="form-control" id="CooTotalAmount" name="CooTotalAmount">
+            </div>
+            <div class="col-md-6">
+                <label for="CurrencyCoded" class="form-label">Currency Code:</label>
+                <input type="text" class="form-control" id="CurrencyCoded" name="CurrencyCoded">
+            </div>
+            <div class="col-md-6">
+                <label for="CurrencyCoded" class="form-label">Currency Code:</label>
+                <input type="text" class="form-control" id="CurrencyCoded" name="CurrencyCoded">
+            </div>
+            <hr>
+            <h4>Invoice:</h4>
+            <div class="col-md-6">
+                <label for="InvoiceNumber" class="form-label">Invoice Number:</label>
+                <input type="text" class="form-control" id="InvoiceNumber" name="InvoiceNumber">
+            </div>
+            <div class="col-md-6">
+                <label for="InvoiceDate" class="form-label">Invoice Date:</label>
+                <input type="date" class="form-control" id="InvoiceDate" name="InvoiceDate">
+            </div>
+            <div class="col-md-6">
+                <label for="INCOTERMSCoded" class="form-label">INCOTERMS Code:</label>
+                <input type="text" class="form-control" id="INCOTERMSCoded" name="INCOTERMSCoded">
+            </div>
+            <div class="col-md-6">
+                <label for="ConsignorName" class="form-label">Consignor Name:</label>
+                <input type="text" class="form-control" id="ConsignorName" name="ConsignorName">
+            </div>
+            <div class="col-md-6">
+                <label for="ConsignorAddress" class="form-label">Consignor Address:</label>
+                <input type="text" class="form-control" id="ConsignorAddress" name="ConsignorAddress">
+            </div>
+            <div class="col-md-6">
+                <label for="TotalInvoiceWeight" class="form-label">Total Invoice Weight:</label>
+                <input type="text" class="form-control" id="TotalInvoiceWeight" name="TotalInvoiceWeight">
+            </div>
+            <div class="col-md-6">
+                <label for="InvoiceValue" class="form-label">Invoice Value:</label>
+                <input type="text" class="form-control" id="InvoiceValue" name="InvoiceValue">
+            </div>
+            <div class="col-md-6">
+                <label for="FreightCosts" class="form-label">Freight Costs:</label>
+                <input type="text" class="form-control" id="FreightCosts" name="FreightCosts">
+            </div>
+            <div class="col-md-6">
+                <label for="InsuranceCosts" class="form-label">Insurance Costs:</label>
+                <input type="text" class="form-control" id="InsuranceCosts" name="InsuranceCosts">
+            </div>
+            <div class="col-md-6">
+                <label for="CertificateNumber" class="form-label">Certificate Number:</label>
+                <input type="text" class="form-control" id="CertificateNumber" name="CertificateNumber">
+            </div>
+            <hr>
+            <h4>Items:</h4>
+            <div class="col-md-6">
+                <label for="TariffCodeNumber" class="form-label">Tariff Code Number:</label>
+                <input type="text" class="form-control" id="TariffCodeNumber" name="TariffCodeNumber">
+            </div>
+            <div class="col-md-6">
+                <label for="CountryofOriginCoded" class="form-label">CountryofOrigin Code:</label>
+                <input type="text" class="form-control" id="CountryofOriginCoded" name="CountryofOriginCoded">
+            </div>
+            <div class="col-md-6">
+                <label for="ItemGrossWeight" class="form-label">Item Gross Weight:</label>
+                <input type="text" class="form-control" id="ItemGrossWeight" name="ItemGrossWeight">
+            </div>
+            <div class="col-md-6">
+                <label for="ItemNetWeight" class="form-label">Item Net Weight:</label>
+                <input type="text" class="form-control" id="ItemNetWeight" name="ItemNetWeight">
+            </div>
+            <div class="col-md-6">
+                <label for="ItemQuantity" class="form-label">Item Quantity:</label>
+                <input type="text" class="form-control" id="ItemQuantity" name="ItemQuantity">
+            </div>
+            <div class="col-md-6">
+                <label for="ItemDeclaredValue" class="form-label">Item Declared Value:</label>
+                <input type="text" class="form-control" id="ItemDeclaredValue" name="ItemDeclaredValue">
+            </div>
+            <div class="col-md-6">
+                <label for="CargoType" class="form-label">Cargo Type:</label>
+                <input type="text" class="form-control" id="CargoType" name="CargoType">
+            </div>
+            
+        </div>
+        
+    </form>
+    <br>
+    <footer>
+        <hr>
+        <h6 class="text-center">v.0.0.1 | Developed by <a href="https://www.tfsbs.com/">TFSBS</a> | All Rights Reserved &copy; 2022</h6>
+    </footer>
+{% endblock %}
